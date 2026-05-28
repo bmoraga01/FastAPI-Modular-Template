@@ -1,5 +1,4 @@
-from fastapi import HTTPException
-
+from app.common.exceptions import NotFoundException
 from app.common.pagination import build_paginated_response
 from app.common.schemas.pagination import PaginatedResponse, PaginationParams
 from app.modules.products.repository import ProductRepository
@@ -24,9 +23,7 @@ class ProductService:
         product = await self.repository.get_by_id(db, id)
 
         if not product:
-            raise HTTPException(
-                status_code=404, detail="Producto no encontrado"
-            )
+            raise NotFoundException("Producto no encontrado")
 
         return ProductRead.model_validate(product)
 
@@ -78,9 +75,7 @@ class ProductService:
         product = await self.repository.get_by_id(db, id)
 
         if not product:
-            raise HTTPException(
-                status_code=404, detail="Producto no encontrado"
-            )
+            raise NotFoundException("Producto no encontrado")
 
         product = await self.repository.update(db, data, product)
 
@@ -90,9 +85,7 @@ class ProductService:
         product = await self.repository.get_by_id(db, id)
 
         if not product:
-            raise HTTPException(
-                status_code=404, detail="Producto no encontrado"
-            )
+            raise NotFoundException("Producto no encontrado")
 
         await self.repository.delete(db, product)
 
