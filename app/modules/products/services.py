@@ -1,11 +1,15 @@
 from app.common.exceptions import NotFoundException
 from app.common.pagination import build_paginated_response
 from app.common.schemas.pagination import PaginatedResponse, PaginationParams
+from app.common.schemas.responses import MessageResponse
 from app.modules.products.repository import ProductRepository
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.modules.products.schemas import ProductCreate, ProductRead
-
+from app.modules.products.schemas import (
+    ProductCreate,
+    ProductRead,
+    ProductUpdate,
+)
 
 class ProductService:
     def __init__(self, repository: ProductRepository):
@@ -19,8 +23,8 @@ class ProductService:
 
         return ProductRead.model_validate(product)
 
-    async def get_by_id(self, db: AsyncSession, id: str) -> ProductRead:
-        product = await self.repository.get_by_id(db, id)
+    async def get_by_id(self, db: AsyncSession, product_id: str) -> ProductRead:
+        product = await self.repository.get_by_id(db, product_id)
 
         if not product:
             raise NotFoundException("Producto no encontrado")
@@ -70,9 +74,9 @@ class ProductService:
         )
 
     async def update(
-        self, db: AsyncSession, id: str, data: ProductCreate
+        self, db: AsyncSession, product_id: str, data: ProductUpdate
     ) -> ProductRead:
-        product = await self.repository.get_by_id(db, id)
+        product = await self.repository.get_by_id(db, product_id)
 
         if not product:
             raise NotFoundException("Producto no encontrado")
@@ -81,12 +85,14 @@ class ProductService:
 
         return ProductRead.model_validate(product)
 
-    async def delete(self, db: AsyncSession, id: str):
-        product = await self.repository.get_by_id(db, id)
+    async def delete(
+        self, db: AsyncSession, product_id: str
+    ) -> MessageResponse:
+        product = await self.repository.get_by_id(db, product_id)
 
         if not product:
             raise NotFoundException("Producto no encontrado")
 
         await self.repository.delete(db, product)
 
-        return {"message": "Producto eliminado"}
+        return MessageResponse(message="Producto eliminado")
