@@ -25,7 +25,7 @@ class UnauthorizedException(AppException):
     """
 
     def __init__(self, message: str = "Unauthorized", errors=None):
-        super().__init__(message=message, status_code=404, errors=errors)
+        super().__init__(message=message, status_code=401, errors=errors)
 
 
 class ForbiddenException(AppException):
@@ -41,7 +41,7 @@ class ForbiddenException(AppException):
     """
 
     def __init__(self, message: str = "Forbidden", errors=None):
-        super().__init__(message=message, status_code=404, errors=errors)
+        super().__init__(message=message, status_code=403, errors=errors)
 
 
 class ConflictException(AppException):
@@ -57,4 +57,4 @@ class ConflictException(AppException):
     """
 
     def __init__(self, message: str = "Conflict", errors=None):
-        super().__init__(message=message, status_code=404, errors=errors)
+        super().__init__(message=message, status_code=409, errors=errors)
