@@ -2,14 +2,21 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
+
 from app.common.exceptions import AppException
 from app.common.schemas.responses import MessageResponse
 from app.core.config import settings
-
 from app.modules.products.routers import router as product
 
 # FastApi instance
 app = FastAPI()
+
+# Only recommended for serving local images
+# For production, it's recommended to serve images through a dedicated static file server like coudflare R2 or AWS S3
+app.mount(
+    "/images", StaticFiles(directory=settings.LOCAL_STORAGE_DIR), name="images"
+)
 
 
 # Excepcions

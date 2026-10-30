@@ -1,15 +1,16 @@
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from app.common.exceptions import NotFoundException
 from app.common.pagination import build_paginated_response
 from app.common.schemas.pagination import PaginatedResponse, PaginationParams
 from app.common.schemas.responses import MessageResponse
 from app.modules.products.repository import ProductRepository
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from app.modules.products.schemas import (
     ProductCreate,
     ProductRead,
     ProductUpdate,
 )
+
 
 class ProductService:
     def __init__(self, repository: ProductRepository):
